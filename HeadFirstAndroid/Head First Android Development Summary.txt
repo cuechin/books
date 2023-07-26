@@ -1,0 +1,234 @@
+Head First Android Development Summary
+
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*- CHAPTER 1 *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+
+* Android is a comprehensive open source platform based on Linux and championed by Google.
+* Android apps are files in particular directories. When you build your app, these files get bundled together, giving you an app you can run on your device.
+* There are some features that are only available in Kotlin.
+* Jetpack Compose: Use activity code to define the app's appearance instead of using layout files.
+* Android SDK (Android Software Development Kit) : includes Android source files, and a compiler that's used to compile your code into an Android Format.
+* Main components of the Android SDK:
+	- SDK Tools: includes the complete set of tools used to develop and debug Android apps.
+	- SDK Build Tools: contains the tools that are required for building Android apps.
+	- SDK Platform: Each version of Android has its own SDK Platform package. It lets you compile your app for that version of Android, and includes the source files for that version.
+	- SDK Platform Tools: This includes tools that interface with the Android platform. The tools are backward compatible, but new features may only be available for new versions of Android.
+
+* Minimum SDK of API 21 so that the app will run on most devices. Android Studio looks at the minimum SDK you want the app to support, and includes all of the files and folders needed for an app. It also sets up the package structure and names the app.
+* Android versions have a version number and a code name. The version number gives the precise version of Android (e.g., 9.0), while the code name is a name that may cover several versions of Android (e.g., Pie). The API level refers to the version of the APIs used by apps. As an example, the equivalent API level for Android version 9.0 is 28.
+* Android libraries: Android Studio makes sure the app includes relevant Android libraries for the minimum SDK specified.
+* Configuration files: Configuration files tell Android what's included in the app, and how the app should run.
+* Android Studio projects use the Gradle build system to compile, build and deploy apps (code), and Gradle projects have a standard folder structure. Android Studio uses this folder structure for all its projects.
+
+ðŸ“¦ MyFirstApp						// Root folder is the name of the project
+ â”— ðŸ“‚ app							// Is a module in the project
+	â”— ðŸ“‚ src							// Contains source code you write and edit
+		â”— ðŸ“‚ main
+			â”— ðŸ“‚ java				// Contains any Kotlin code you write. Activities you create live here.
+				â”— ðŸ“‚ com/hfad/firstapp
+					â”— ðŸ“œ MainActivity
+		â”— ðŸ“‚ res						// You can find app resources
+			â”— ðŸ“‚ layout
+				â”— ðŸ“œ activity_main.xml
+			â”— ðŸ“‚ values
+				â”— ðŸ“œ strings.xml
+		â”— ðŸ“œ AndroidManifest.xml		// Every Android app must include a file called like this. The manifest file contains information about the app, such as what components it contains, required libraries, and other declarations.
+
+* Q: Why does Android Studio use Gradle? A: When you develop Android apps, you often need to include extra libraries that aren't included in the Android SDK. Gradle can download these libraries for you, which makes your coding life much easier. Gradle also uses Groovy and Kotlin as a scripting language, which means you can easily create quite complex builds with Gradle.
+* The emulator is built on an existing emulator called QEMU.
+* An APK file is an Android application package. It's like a ZIP or JAR file for Android applications. It contains the app's bytecode, libraries, and resources. You install an app won a device by installing the APK.
+* The Run command doesn't just run your app. It also handles all the preliminary tasks that are needed for the app to run. Here's an overview of what happens:
+	1. The Kotlin source files get compiled to bytecode.
+	2. An Android application package, or APK file, gets created.
+	3. The APK is installed on the device.
+	4. The device starts the app's main activity.
+* Q: Kotlin and Java are both Java VM languages. Does this mean that Android apps run in a JVM? A: No. Each app runs in its own process using the Android runtime (ART). This means that apps run a lot faster and more efficiently.
+
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*- CHAPTER 2 *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+
+* All the UI components you add to layout files use the same or similar attributes because they inherit from the same Android View class.
+* Here are some of the most common attributes:
+	- android:id, android:layout_width, android:layout_height, android:text
+* The View class includes lots of different methods. TextView is a type of View... and Button is a type of TextView, which means it's also a type of View.
+* Q: Why does the button show its text as uppercase? A: It's because the app's default theme changes the button text to uppercase by default. You can stop the button text from being displayed as uppercase by adding the following code to each <Button> element in your layout: android:textAllCaps="false".
+* An easy way of viewing any warnings or suggestions is to switch to the design editor view of the layout, and check out the component tree panel.
+* Hardcoding the text in the layout isn't the best approach. You don't want to limit yourself to just one country or language - you want to make it available internationally and for different languages. It also makes it much harder to make app-wide changes to the text.
+* A better approach is to put the text values into a String resource file.
+* This approach also makes it much easier to localize the app. Instead of hardcoding the text in one language, you can provide separate String resource file for each language you want to support. This enables the app to switch the language that's used in the app so that it matches the device locale.
+* strings.xml is the app's default String resource file, and Android Studio automatically creates this file for you when you create a new project.
+	- Hold name/value pairs of Strings so that they can be referenced throughout the app.
+	- "@string/find_beer"
+		@string : This is just the way of telling Android to look up a text value from a String resource file.
+		find_beer: tells Android to look up the value of a resource with the name find_beer.
+* There are two things that allow Android to recognize strings.xml as being a String resource file:
+	- The file is held in the folder app/src/main/res/values.
+	- The file <resources> element, which contains one or more <string> elements.
+* Each name/value pair takes the form:
+	- <string name="string_name">string_value</string>
+* Q: How does separating out the String values help with localization? A: Suppose you want the application to be in English by default, but in French if the device language is set to French. You can have one String resource file for English text, and another resource file for French text.
+* Q: How does the app know which String resource file to use?
+	- A: Put the default English String resource file in the app/src/main/res/values folder as normal, and the French one in a new folder named app/src/main/res/values-fr folder.
+		If the device is set to any other language, it will use the String resources in app/src/main/res/values instead.
+* Add values to the spinner: you add multiple Strings to an array resource, and use this array for the spinner's list of values.
+* To add an array of Strings to String resource file, you use the following sintax:
+	<string-array name="string_array_name">
+		<item>string_value1</item>
+		...
+	<string-array>
+* To retrieve an array of Strings you use: "@array/array_name"
+* All activities have to extend an activity class such as AppCompatActivity. When a class extends AppCompatActivity, it transforms your plain old Kotlin class into a full-fledged, card-carrying Android activity.
+* All activities must also implement the onCreate() method. This method gets called when the activity object gets created, and it's used to perform basic setup such as what layout the activity is associated with. This is done via a call to setContentView(): setContentView(R.layout.activity_main).
+* Each time the user does something in your app it's called an event. Such as clicking a button, swiping the screen, or pressing a hardware key on the device.
+* You can make a button respond to on-click events by adding an onClickListener to the button.
+* Each time the button is clicked, the OnClickListener "hears" the click, and responds to it. You specify the action by passing it a block of code when the button is clicked.
+* To add an OnClickListener to the button, you need to get a reference to the button. You do this using a method named findViewById.
+* findViewById method lets you get a reference to any view in the layout that has an ID. Specify the view's type an ID, and the method returns a reference to it.
+	- val findBeer = findViewById<Button>(R.id.find_beer) : Once you have a reference to the button, you can add an OnClickListener to it by calling its setOnClickListener() method.
+* Notice that we're adding the OnClickListener code to MainActivity's onCreate() method. So adding the call to setOnClickListener() here means that the button will be able to start responding to clicks as soon as possible.
+* You make the button do something when it's clicked by passing a lambda to its setOnClickListener() method. The lambda specifies what you want to happen each time the button is clicked.
+* You can get the current value in a spinner using its selectedItem property. It can hold any type of value, not just Strings, so you need to convert its value before you can use it. You could also use it in a String template using the following code instead: val color = "${beerColor.selectedItem}"
+* Q: What's R ? A: R refers to R.java. It's a special file that's automatically generated when you build the app. Android uses R.java to keep track of any resources used within the app such as layouts, String resources, and views. You don't change any code in R.java yourself. Android Studio automatically generates for you.
+
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*- CHAPTER 3 *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+
+*** LINEAR LAYOUT ***
+
+* xmlns:android:"http://schemeas.android.com/apk/res/android" - Defining this namespace gives your layout access to the elements and attributes that your layout needs, and you need to define it in every layout file you create.
+* android:layout_width and android:layout_height : These attributes are mandatory for all types of layout and view.
+	- You can set to "wrap_content", "match_parent", or a specific size
+	- "wrap_content" means that you want the layout to be just big enough to hold all of the views inside it, and "match_parent" means that you want the layout to be as big as its parent.
+* Some devices create very sharp images by using very tiny pixels. Other devices are cheaper to produce because they have fewer, larger pixels.
+* You use density-independent pixels (dp) to avoid creating interfaces that are overly small on some devices, and overly large on others. A measurement in density-independent pixels is roughly the same size across all devices. You set text sizes using scalable pixels (sp). Scalable pixels are like density-independent pixels except they’re used for fonts.
+* If the orientation is horizontal, the order in which the views are arranged depends on the device language settings.
+* Anatomy of AndroidManifest.xml
+	- lives in the app/src/main folder of your project.
+	- contains essential information about your app that the Android operating system, the Android build tools, and the Google Play Store need to know about. This includes the app’s package name, details of any activities, and any permissions the app requires.
+	- Android Studio usually adds the supportsRtl property to AndroidManifest.xml automatically, so that your app supports right-to-left languages by default.
+* Padding puts extra space between the layout’s edges and its contents. You can also use padding with views. This adds extra space between the view’s edges and its contents.
+	- android:paddingStart attribute adds padding to the start edge of the layout. For left-to-right languages, the start edge is on the left, while if the device language is set to one that’s read from right to left, the start edge is on the right.
+	- android:paddingEnd attribute adds padding to the end edge of the layout. This is on the right for left-to-right languages, and on the left for right-to-left languages.
+	- If you want to apply the same amount of padding to the horizontal or vertical edges, you can also use android:paddingHorizontal and android:paddingVertical.
+* xmlns:tools:"http://schemeas.android.com/tools" - The tools namespace includes a set of attributes that are used by the tools included in Android Studio.
+* <EditText>
+	- android:inputType attribute specifies what type of data you expect the user to enter so that Android can provide the correct keyboard type.
+* android:layout_weight="number" : Allocating weight to a view is a way of telling it to stretch to take up extra space in the layout. The layout first makes sure that each view has enough space for its content. Once it’s done that, the layout takes any extra space and divides it proportionally between the views with a weight of 1 or greater.
+
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*- CHAPTER 4 *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+
+* When Android displays a layout on the device screen, it first checks the structure of the layout file, and uses this to build a hierarchy of views.
+* Each view in the layout needs to be initialized, measured, laid out, and drawn. In deeply nested layouts, this can slow down your app.
+* If you have a more complex UI like this, an alternative to using nested layouts is to use a constraint layout.
+* Constraints layouts are designed to work with Android Studio's design editor.
+	- More complex than a linear or frame layout, but it’s way more flexible. It’s also much more efficient for complex UIs as it gives you a flatter view hierarchy, which means that Android has less processing to do at runtime
+	- Constraint layouts are part of Android Jetpack.
+* Android Jetpack is a collection of libraries that help you follow best practice, reduce boilerplate code, and make your coding life easier. Here are some of our favorite Jetpack components:
+	- Fragment: kind of subactivity that's used to control part of the screen.
+	- Navigation: includes tools to navigate from screen to screen, and safely pass arguments between them.
+	- LiveData: lets you build apps that respond to data changes as soon as they happen.
+	- Data binding: This lets you build responsive layouts that can access Kotlin methods and properties.
+	- Compose: A toolkit for building native Android apps without using layout files.
+	- View Model: lets you move a screen's business logic into a separate class.
+	- Constraint layout: Use this to build complex, flexible layouts without the overheads of nesting.
+	- Recycler view: An efficient list you can use to display data, and navigate between screens.
+	- Room: A persistence library that lets you create and interact with internal databases.
+	- Lets you write code that works consistently across new and old versions of Android.
+	- AppCompatActivity is part of Android Jetpack. It adds new features to activities across new and old versions of Android without you having to worry about backward compatibility.
+* Use Gradle to include Jetpack libraries.
+	- Gradle is a build tool that’s used to compile code, configure apps, and fetch any extra libraries that your project requires.
+	- Every time you create a new project, Android Studio creates two Gradle files named build.gradle.
+	- The first version of build.gradle lives in the project folder, and specifies the basic settings of your app, such as what version of the Gradle plug-in to use. The second version of build.gradle lives in the project’s app folder. It’s where the majority of the app’s properties are set, such as the API level. Behind the scenes, every Android Studio project uses Gradle as its build tool.
+	- The project build.gradle needs a Google repository line Every project needs to know where to find any extra Jetpack libraries it needs, and this is done by adding a reference to the Google repository in the project’s build.gradle file.
+	- The app build.gradle includes the constraint layout’s library To use constraint layouts, a reference to its library needs to be included in the app’s build.gradle file
+
+* Position views by adding constraints. Each view needs at least one horizontal and one vertical constraint.
+* Center views by adding constraints to opposite sides of the view.
+* Change the view's bias to update its position between the constraints.
+	- This tells Android what the proportionate length of each constraint should be on either side of the view.
+	- The view maintains this relative position irrespective of screen size and orientation.
+* Q: You said that all the Jetpack components have separate libraries that aren’t part of the main Android release. Why is this? A: It’s so you can use new versions and features of these components in older versions of Android.
+* Q: Is there a way of making the design editor add constraints for me automatically? A: “Enable Autoconnection to Parent” button in the design editor toolbar, which you can use to automatically add constraints between each new view and the edge of the blueprint. There’s also an Infer Constraints button, which guesses what constraints are needed based on the position of views in the layout.
+* You can change a view's size to match its constraints if the view has constraints on opposing sides.
+	- You do this by setting its layout_width and/or layout_height to 0dp: set layout_width to 0dp to make the view match its horizontal constraints, and set layout_height to 0dp to make it match its vertical ones
+* You can align views to one another, or use a guideline or barrier.
+* A guideline is positioned a fixed distance or percentage from the blueprint's edge.
+* A barrier moves as its views change size.
+	- This is like a guideline, except that it doesn’t have a fixed position
+* Use a chain to control a linear group of views. Chains can be horizontal or vertical.
+* Horizontal and vertical chains can work together to display views in a grid.
+* The spread chain style spreads its views out evenly
+* The spread inside chain style moves its outer views to the edges, and the inner views are spread out evenly
+* The packed chain style packs views together in the center
+* Q: Can I attach a chain to a guideline? A: Yes.
+* A flow is like a multi-line chain.
+* Always test layouts on a variety of device sizes and orientations to make sure they look and behave how you want.
+
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*- CHAPTER 5 *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+
+* String resources can look up values at runtime. 
+* The Chronometer view implements a simple timer. Chronometer is a subclass of TextView.
+	- base: property used to set the start time, the time from which the chronometer will start counting.
+	- SystemClock.elapsedRealtime() returns the number of miliseconds since the device was booted. Setting the base property to this value means that the time that's displayed is set to 0.
+	- start() method makes the chronometer start counting from the base time: stopwatch.start()
+	- stop() method pauses the chronometer so it stops counting: stopwatch.stop()
+* Rotating the screen changes the device configuration.
+	- When Android runs your app and starts an activity, it takes into account the device configuration.
+	- Android needs to know what the device configuration is when it starts an activity because the configuration can impact what resources are needed for the application.
+	- The device configuration includes options specified by the user (such as the locale), and options relating to the physical device (such as the orientation and screen size). A change to any of these options results in the activity being destroyed and then recreated.
+	- When the device configuration changes, anything that displays a user interface needs to be updated to match the new configuration. If you rotate the screen, for example, Android spots the orientation has changed, and classes this as a change to the device configuration. It destroys the current activity, and then recreates it so that resources appropriate to the new configuration get picked up.
+	- A device configuration change results in the activity being destroyed and recreated.
+	- Android apps can have multiple versions of the same resource file. If you want to use a different version of activity_main.xml when the device is in landscape mode, for example, you put the file in the layout-land resources folder.
+* Your activity inherits the lifecycle methods from the android.app.Activity class. If you override any of these methods, you need to call up to the method in the superclass.
+	- The main state of an activity is when it’s running or active. An activity is running when it’s in the foreground of the screen.
+	- An activity starts running after it has been launched, and at the end of its life, the activity is destroyed.
+* onSaveInstanceState(Bundle) enables your activity to save its state before the activity gets destroyed. You can use the Bundle to restore state in onCreate().
+* You add values to a Bundle in onSaveInstanceState() using bundle.put...("name", value).
+* You retrieve values from the bundle in onCreate() using bundle.get...("name").
+* onCreate() and onDestroy() deal with the birth and death of the activity.
+	- When an activity moves from being launched to being destroyed, it triggers these key activity lifecycle methods.
+	- onCreate() gets called when the activity is first created, and it's where do your normal activity setup.
+	- onDestroy() gets called just before your activity gets destroyed.
+	- NOTE: If your device is extremely low on memory, onDestroy() might not get called before the activity is destroyed.
+	- The activity lifecycle methods are defined in the android.app.Activity class. Each activity you create is a subtype of this class, so it inherits these methods.
+* An activity’s state is stopped if it’s completely hidden by another activity and isn’t visible to the user. The activity still exists in the background and maintains all state information.
+* onRestart(), onStart(), and onStop() deal with the visibility of the activity.
+	- OnStart() is called when the activity is about to become visible. This can be when the activity is first created, or when it becomes visible again after losing its visibility.
+	- onStop() When the activity has stopped being visible. This might be because it’s completely hidden by another activity that’s appeared on top of it, or because the activity is about to be destroyed.
+	- onRestart() method is called before onStart(), but only when the activity becomes visible again after previously losing visibility. It’s not called when the activity first becomes visible.
+	- onStart() gets called whenever the activity becomes visible. onRestart() only gets called when the activity becomes visible again after losing visibility.
+	- Unlike onRestart(), onStart() also gets called when the activity first becomes visible after it’s been created. This means that it’s slightly more efficient to use onRestart() than it is to use onStart().
+* onResume() and onPause() get called when the activity gains and loses the focus.
+	- An activity has a state of paused if it’s lost the focus but is still visible to the user. The activity is still alive and maintains all its state information.
+	- onPause() gets called when your activity is visible but another activity has the focus.
+	- onResume() is called immediately before your activity is about to start interacting with the user.
+1. The activity gets launched, and the onCreate() and onStart() methods run.
+	At this point, the activity is visible, but it doesn’t have the focus. 
+2. The onResume() method runs. It gets called when the activity is about to move into the foreground.
+	After the onResume() method has run, the activity has the focus and the user can interact with it.
+3. The onPause() method runs when the activity stops being in the foreground.
+	After the onPause() method has run, the activity is still visible but doesn’t have the focus.
+4. If the activity moves into the foreground again, the onResume() method gets called.
+	The activity may go through this cycle many times if the activity repeatedly loses and then regains the focus.
+5. If the activity stops being visible to the user, the onStop() method gets called. 
+	After the onStop() method has run, the activity is no longer visible.
+6. If the activity becomes visible to the user again, the onRestart() method gets called, followed by onStart() and onResume().
+	The activity may go through this cycle many times.
+7. Finally, the activity is destroyed.
+	As the activity moves from running to destroyed, the onPause() and onStop() methods get called before the activity is destroyed.
+
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*- CHAPTER 6 *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+
+* A fragment has Kotlin code and layout.
+* Every fragment extends the Fragment class. Is part of Android Jetpack
+* onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle? ) : View?
+	- gets called each time Android needs the fragment's layout.
+	- The first parameter is a LayoutInflater that you use to inflate the fragment’s layout. As you learned in Chapter 3, inflating a layout turns its XML views into objects.
+	- The second parameter is a ViewGroup?. This is the ViewGroup in the activity’s layout that displays the fragment.
+	- The final parameter is a Bundle?. This is used if you’ve previously saved the fragment’s state, and want to reinstate
+	- The onCreateView() method returns a View?, which is an inflated version of the fragment’s layout.
+	- Once the fragment’s layout has been inflated, the View hierarchy is inserted into the activity’s layout, and displayed.
+* The Fragment class doesn't extend Activity.
+* Fragments don't have findViewById() method.
+* The Navigation component is a suite of libraries you add to your project using Gradle. The Navigation component is part of Android Jetpack.
+* A navigation graph describes possible destinations and navigation paths. It uses actions to describe these paths.
+* A navigation host is an empty container used to display the fragment you navigate to. The Navigation component comes with a default navigation host named NavHostFragment, which extends the Fragment class and implements the NavHost interface.
+	- 
+* A navigation controller uses actions to control which fragment is displayed in the navigation host.
