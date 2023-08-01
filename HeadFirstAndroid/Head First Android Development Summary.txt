@@ -223,12 +223,94 @@ Head First Android Development Summary
 	- The first parameter is a LayoutInflater that you use to inflate the fragment’s layout. As you learned in Chapter 3, inflating a layout turns its XML views into objects.
 	- The second parameter is a ViewGroup?. This is the ViewGroup in the activity’s layout that displays the fragment.
 	- The final parameter is a Bundle?. This is used if you’ve previously saved the fragment’s state, and want to reinstate
-	- The onCreateView() method returns a View?, which is an inflated version of the fragment’s layout.
+	- The onCreateView() method returns a View?, which is an inflated version of the fragment’s layout, and returns its root view.
 	- Once the fragment’s layout has been inflated, the View hierarchy is inserted into the activity’s layout, and displayed.
 * The Fragment class doesn't extend Activity.
+* You add a fragment to a layout using FragmentContainerView. This is a type of FrameLayout that's used to display fragments.
 * Fragments don't have findViewById() method.
 * The Navigation component is a suite of libraries you add to your project using Gradle. The Navigation component is part of Android Jetpack.
-* A navigation graph describes possible destinations and navigation paths. It uses actions to describe these paths.
-* A navigation host is an empty container used to display the fragment you navigate to. The Navigation component comes with a default navigation host named NavHostFragment, which extends the Fragment class and implements the NavHost interface.
-	- 
-* A navigation controller uses actions to control which fragment is displayed in the navigation host.
+	- The Android team recommends using fragments instead. Is designed to work with fragments, so this is now the standard way of implementing navigation.
+* Navigating component between fragments is comprised of three main parts:
+	- A navigation graph describes possible destinations and navigation paths. It uses actions to describe these paths.
+		* A destination is a screen in the app- usually a fragment- which the user can navigate to.
+		* Actions are used to connect destinations in the navigation graph.
+		* Every action needs a unique ID. Android uses this ID to determine which destinations needs to be displayed as the user navigates through the app.
+		* Navigation graph are XML resources.
+	- A navigation host is an empty container used to display the fragment you navigate to. The Navigation component comes with a default navigation host named NavHostFragment, which extends the Fragment class and implements the NavHost interface.
+		* NavHostFragment: subclass of Fragment that implements the NavHost interface. You add it to a layout file using a FragmentContainerView
+		* app:navGraph - attribute that tells the navigation host which navigation graph use.
+		* app:defaultNavHost - attribute lets the navigation host interact with the device back button.
+	- A navigation controller uses actions to control which fragment is displayed in the navigation host.
+* In summary, we created a navigation graph, and linked it to a navigation host that’s held in a FragmentContainerView in MainActivity's layout.
+* Fragment OnClickListener code is a little different
+	- The first difference is that you add an OnClickListener to a fragment’s button in the fragment’s onCreateView() method, not onCreate(). This is because a fragment first has access to its views in onCreateView(), so it’s the best place to set any OnClickListeners.
+	- The second difference is the Fragment class doesn’t include a findViewById() method, so you can’t directly call it to get a reference to any views. You can, however, call findViewById() on the fragment’s root view instead.
+* Each time you want to navigate to a new fragment, you first need to get a reference to a navigation controller. You do this by calling the findNavController() method
+* Once you have a navigation controller, you ask it to navigate to a new destination by calling its navigate() method. This method takes one parameter: a navigation action ID.
+
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*- CHAPTER 7 *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+
+* Safe Args is an extra part of the Navigation component that’s used to pass arguments in a type-safe way. It generates Directions and Args classes.
+* Directions classes are used to pass arguments to destinations.
+	- Use a Directions class to add arguments to actions.
+* Safe Args generates a Directions class for every destination you can navigate from.
+	- Each Directions class includes a generated method for each of the fragment's actions.
+	- Q: Safe Args is added to the build.gradle files as a plug-in, while the rest of the Navigation component it is included as a dependency. Why is this ? A: Safe Args is added as a plug-in because it needs to be able to generate the Directions and Args classes. Plug-ins can generate code, but dependencies can’t.
+* Args classes are used to retrieve arguments that have been passed to destinations.
+	- Each Args class includes a fromBundle() method that you use to retrieve any arguments that have been passed to the fragment. 
+* Safe Args generates an Args class for every destination that accepts arguments.
+* Use pop behavior in the navigation graph to pop destinations off the back stack.
+	- When you go from destination to destination in your app, Android keeps track of each place you’ve visited by adding it to the back stack.
+	- The back stack is a log of all the places you’ve visited in the app. Each time you navigate to a destination, Android adds it to the top of the back stack, and when you press the back button, it pops the most recent destination off the stack, and displays the one underneath.
+* Before we can start using Safe Args, we need to add a classpath to the project build.gradle file.
+	- classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version
+* reversed(): reverses the order of a String's letters.
+
+
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*- CHAPTER 8 *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+
+* When you have screens you want to able to access from anywhere in your app, you might want to use one of Android's navigation UI component: app bar, bottom navigation bar, navigation drawer
+* The default app bar is added using a theme.
+	- A theme gives your app a consistent look and feel across multiple screens. It controls the app’s general appearance, and whether it includes an app bar.
+	- You can ass items to the app bar which, when clicked, navigate to destinations.
+	- Having an app bar is useful for a number of reasons:
+		1. It makes key actions more prominent in a way that’s predictable, such as sharing content or performing searches.
+		2. It can help the user know where they are in the app by displaying the app name, or a label for the current screen.
+		3. You can use it to navigate to different destinations.
+* Material design
+	- Design system developed by Google that helps you build high-quality apps and websites with a consistent look and feel.
+	- https://material.io
+	- Its latest evolution is known as Material 3, which gives users a more fluid experience with a personalized color palette.
+	- The app build.gradle file needs a Material library dependency. You do this by adding a dependency to the com.google.android.material library in the app's build.gradle file.
+* The android:theme attribute in AndroidManifest.xml specifies which theme to apply.
+	- The android:label attribute refers to the text that’s displayed in the app bar, and it’s the name you specify when you first create the app.
+* You define styles as <style> elements in one or more resource files.
+	- Android Studio created two style resource files for us. Both files are named themes.xml, and they’re located in the app/src/main/res/values and app/src/main/res/values-night folders. The one in the values folder is the app’s default style resource file, while the one in the values-night folder is used at night.
+	- Every style must have a name to identify it by, and you define this using the name attribute. AndroidManifest.xml's theme attribute uses this name to set the app's theme.
+	- The style also includes a parent attribute, which specifies which underlying theme the style should be based on.
+	- <item> elements, override some of the theme’s colors.
+	- The primary color is the app’s main color, and it’s used for things like the app bar. The secondary color provides a contrast, and it’s used by some views.
+	- @color to refer to a color in a color resource file.
+		* When you create a new project, Android Studio usually includes a default color resource file named colors.xml. It’s located in the app/src/main/res/values folder, and its colors can be used throughout your app.
+		* To change your app’s color scheme, simply add the colors you want to the color resource file, and refer to them in its style resource files.
+		* More about colors are used: https://material.io/develop/android/theming/color
+		* There's also a color tool to help you choose your app's color scheme: https://material.io/tools/color
+* You can replace the default app bar with a toolbar that includes the latest Android features and more flexibility.
+* A Material toolbar is a toolbar that works well with Material themes.
+	- View that you add to your layout, this means you have full control over its size and position.
+	- Works well with Material themes.
+	- com.google.android.material.appbar.MaterialToolbar is the fully qualified path of the MaterialToolbar class.
+	- ?attr prefix in the above code means that you want to use an attribute from the current theme.
+	- ?attr/actionBarSize to refer to the height of the theme’s default app bar.
+	- style="@style/Widget.MaterialComponents.Toolbar.Primary" -> This styles the toolbar so it has the same general appearance as the theme's default app bar.
+	- To make the toolbar behave like a proper app bar, you do this by calling the setSupportActionBar() method, and passing it a reference to the toolbar.
+* A menu resource file adds items to toolbars, bottom navigation bars, and navigation drawers.
+* Make sure there are matching item and destination IDs in the menu resource file and navigation graph. The Navigation component depends on matching IDs for navigation.
+* Add items to a toolbar using onCreateOptionsMenu().
+* Implement toolbar navigation using onOptionsItemSelected().
+* Use an AppBarConfiguration object to configure the toolbar to work with the Navigation component.
+* A bottom navigation bar can hold up to five items.
+	- This appears at the bottom of the screen.
+* A navigation drawer can hold many items, grouped into sections.
+	- Drawer that slides out from the edge of the screen.
+* Create a navigation drawer by adding a drawer layout to your activity’s layout. The drawer layout's first element needs to be a view that defines the activity’s main content. Its second element defines the contents of the drawer.
