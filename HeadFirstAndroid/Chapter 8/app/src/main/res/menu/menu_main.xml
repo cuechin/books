@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single"> <!-- This option means that a single item in the group will be highlighted when the user clicks on it (the item the user selects). -->
+        <item
+            android:id="@+id/inboxFragment"
+            android:icon="@android:drawable/ic_dialog_email"
+            android:title="Inbox" />
+        <item
+            android:id="@+id/sentItemsFragment"
+            android:icon="@android:drawable/ic_menu_send"
+            android:title="Sent Items" />
+    </group>
+
+    <item android:title="Support"> <!-- This adds a support heading to the navigation drawer -->
+        <menu> <!-- The above code displays the Help item in a Support section -->
+            <group android:checkableBehavior="single"> <!-- We're put the Help item in a group so that when it's selected it will get an extra highlight. -->
+                <item
+                    android:id="@+id/helpFragment"
+                    android:icon="@android:drawable/ic_menu_help"
+                    android:title="Help" />
+            </group>
+        </menu>
+    </item>
+</menu>

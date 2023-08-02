@@ -295,7 +295,10 @@ Head First Android Development Summary
 		* To change your app’s color scheme, simply add the colors you want to the color resource file, and refer to them in its style resource files.
 		* More about colors are used: https://material.io/develop/android/theming/color
 		* There's also a color tool to help you choose your app's color scheme: https://material.io/tools/color
+		* Q: Can styles only be used to override the default colors? A: No, you can use them to override any of the theme’s properties.
 * You can replace the default app bar with a toolbar that includes the latest Android features and more flexibility.
+	- Q: Can you add a toolbar to a fragment? A: Yes. A toolbar is a type of View, so you can add it to activities or fragments.
+	- Q: How do I know whether to add it to an activity or a fragment? A: If you want the toolbar’s layout to be the same for all fragments, add it to the activity that displays these fragments. If you want the toolbar’s layout to be significantly different, consider adding it to the fragment instead.
 * A Material toolbar is a toolbar that works well with Material themes.
 	- View that you add to your layout, this means you have full control over its size and position.
 	- Works well with Material themes.
@@ -304,13 +307,39 @@ Head First Android Development Summary
 	- ?attr/actionBarSize to refer to the height of the theme’s default app bar.
 	- style="@style/Widget.MaterialComponents.Toolbar.Primary" -> This styles the toolbar so it has the same general appearance as the theme's default app bar.
 	- To make the toolbar behave like a proper app bar, you do this by calling the setSupportActionBar() method, and passing it a reference to the toolbar.
-* A menu resource file adds items to toolbars, bottom navigation bars, and navigation drawers.
+* A menu resource file adds items to toolbars, bottom navigation bars, navigation drawers, and pop-ups. Each menu is defined in an XML menu resource file which specifies the items that you want to appear.
+	- Find out more here: https://developer.android.com/guide/topics/ui/themes
+	- Inside the <menu> element, you typically have a number of <item> elements, each one describing a separate item.
+	- The <item> element has a number of attributes that you can use to control the item’s appearance.
+	- The android:icon attribute specifies which icon (if any) should be displayed for the item.
+	- The android:title attribute defines the item’s text.
+	- The app:showAsAction attribute specifies how you want the item to appear in the toolbar.
 * Make sure there are matching item and destination IDs in the menu resource file and navigation graph. The Navigation component depends on matching IDs for navigation.
 * Add items to a toolbar using onCreateOptionsMenu().
+	- This method gets called when the activity is ready to add items to the toolbar. It inflates the menu resource file, and adds each item it describes to the toolbar.
+	- The line: menuInflater.inflate(R.menu.menu_toolbar, menu) inflates the menu resource file. Behind the scenes, it creates a Menu object that represents the menu resource file, and any items the menu resource file contains are translated to MenuItem objects. These are then added to the toolbar.
 * Implement toolbar navigation using onOptionsItemSelected().
+	- This method runs whenever an item in the toolbar is clicked.
+* Up navigation may sound the same as using the device Back button, but it’s slightly different. The Back button allows users to work their way back through the back stack: the history of screens they’ve visited. The Up button, on the other hand, is based on the navigation graph hierarchy. It provides a quick way of going up this hierarchy.
+	- Q: When does the Up button appear? A: When any fragment is displayed in the navigation host that’s not the start destination in the navigation graph.
 * Use an AppBarConfiguration object to configure the toolbar to work with the Navigation component.
+	- The AppBarConfiguration class is part of the Navigation component, and it’s used to make app bars and toolbars play nicely with the navigation controller.
 * A bottom navigation bar can hold up to five items.
 	- This appears at the bottom of the screen.
+	- Just like a toolbar, a bottom navigation bar is a type of view that you add to your layout.
+	- <com.google.android.material.bottomnavigation.BottomNavigationView ... />
+	- Unlike a toolbar, you don’t need to write Kotlin code to add menu items to a bottom navigation bar. You simply specify which menu resource file to add to the bar using the app:menu attribute.
+	- Link the bottom navigation bar to the navigation controller. All you need to do is get a reference to the BottomNavigationView, which defines the navigation bar, and call its setupWithNavController() method.
+	- Each time you click on an item in the navigation bar, the navigation controller fetches its ID and looks for a destination with a matching ID in the navigation graph. It then passes this destination to the navigation host so that it’s displayed on the device screen.
 * A navigation drawer can hold many items, grouped into sections.
 	- Drawer that slides out from the edge of the screen.
 * Create a navigation drawer by adding a drawer layout to your activity’s layout. The drawer layout's first element needs to be a view that defines the activity’s main content. Its second element defines the contents of the drawer.
+* Q: Do I have to add the Navigation component to each app that includes navigation? Isn’t there a shortcut? A: The Navigation component isn’t included in the main Android libraries, so you need to add it to your project before you can use it.
+* Nagivation component:
+	- NavHostFragment: A default implementation of a navigation host.
+	- Navigation graph:
+		* Holds navigation information such as destinations.
+		* Describes the possible navigation paths through an app.
+		* Destination: A place you can navigate to, usually a fragment.
+		* Navigation host: An empty container used to display destinations.
+		* Navigation controller: Controls which destinations is displayed.
