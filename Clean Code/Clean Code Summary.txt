@@ -1,0 +1,10 @@
+Clean Code Summary
+
++ Chapter 1: Clean Code
+
+* Writing clean code requires the disciplined use of a myriad little techniques applied
+through a painstakingly acquired sense of “cleanliness.” This “code-sense” is the key.
+A programmer with “code-sense” will look at a messy module and see options and variations
+
+* Bjarne Stroustrup, inventor of C++ and author of The C++ Programming Language:
+Apparently Bjarne thinks that clean code is pleasing to read
