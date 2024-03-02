@@ -7,4 +7,349 @@ through a painstakingly acquired sense of “cleanliness.” This “code-sense�
 A programmer with “code-sense” will look at a messy module and see options and variations
 
 * Bjarne Stroustrup, inventor of C++ and author of The C++ Programming Language:
-Apparently Bjarne thinks that clean code is pleasing to read
+    - Thinks that clean code is pleasing to read. Reading it should make you smile.
+    - Also mentions efficiency.
+    - Wasted cycles are inelegant, they are not pleasing.
+    - Bad code tempts the mess to grow! When others change bad code, they tend to make it worse.
+    - Error handing should be complete. This goes to the discipline of paying attention to details.
+    - Memory leaks are another, race conditions still another. Inconsistent naming yet another.
+    - Clean code is focused. Each function, each class, each module exposes a single-minded attitude that remains entirely undistracted, and unpolluted, by the surrounding details.
+
+* Grady Booch, author of Object Oriented Analysis and Design with Applications:
+    - He takes a readability perspective. Clean code should read like well-written prose.
+    - Use of the phrase "crisp abstraction". "Crisp is nearly a synonym for "concrete".
+    - Our code should be matter-of-fact as opposed to speculative. It should contain only what is necessary. Our readers should perceive us to have been decisive.
+
+* “Big” Dave Thomas, founder of OTI, godfather of the Eclipse strategy:
+    - The discipline of Test Driven Development has made a profound impact upon our industry and has become one of our most fundamental disciplines. Code, without tests, is not clean.
+    - Smaller code is better.
+    - Code should be composed in such a form as to make it readable by humans.
+
+* Michael Feathers, author of Working Effectively with Legacy Code:
+    - Clean code is code that has been taken care of.
+
+* Ron Jeffries, author of Extreme Programming Installed and Extreme Programming Adventures in C#:
+    - Simple code:
+        - Runs all the tests;
+        - Contains no duplication;
+        - Expresses all the design ideas that are in the system;
+        - Minimizes the number of entities such as classes, methods, functions and the like.
+    - Look at whether an object or method is doing more than one thing. If it’s an object, it probably needs to be broken into two or more objects. If it’s a 
+    method, I will always use the Extract Method refactoring on it, resulting in one method that says more clearly what it does, and some submethods saying how it is done.
+    - No duplication, one thing, expressiveness, tiny abstractions.
+
+* Ward Cunningham, inventor of Wiki, inventor of Fit, coinventor of eXtreme Programming. Motive force behind Design Patterns. Smalltalk and OO thought leader. The godfather of all those who care about code.
+    - It is not the language that makes programs appear simple. It is the programmer that make the language appear simple!
+
+* The @author field of a Javadoc tells us who we are. , authors are responsible for communicating well with their readers.
+* Making it easy to read actually makes it easier to write.
+* If you want to go fast, if you want to get done quickly, if you want your code to be easy to write, make it easy to read.
+* The Boy Scout Rule: The cleanup doesn’t have to be something big. Change one variable name for the better, break up one function that’s a little too large, eliminate one small bit of duplication, clean up one composite 'if' statement.
+
++ Chapter 2: Meaningful Names
+
+* Use Intention-Revealing Names
+    - The name of a variable, function, or class, should answer all the big questions. It should tell you why it exists, what it does, and how it is used. If a name requires a comment, then the name does not reveal its intent.
+    - We should choose a name that specifies what is being measured and the unit of that measurement:
+        int elapsedTimeInDays;
+        int daysSinceCreation;
+        int daysSinceModification;
+        int fileAgeInDays;
+    - The problem isn’t the simplicity of the code but the implicity of the code, the degree to which the context is not explicit in the code itself. The code implicitly requires that we know the answers to questions.
+    - The answers to these questions are not present in the code sample, but they could have been.
+
+* Avoid Disinformation
+    - We should avoid words whose entrenched meanings vary from our intended meaning.
+    - Do not refer to a grouping of accounts as an accountList unless it’s actually a List. The word list means something specific to programmers. If the container holding the accounts is not actually a List, it may lead to false conclusions. So accountGroup or bunchOfAccounts or just plain accounts would be better.
+    - Beware of using names which vary in small ways E.g. XYZControllerForEfficientHandlingOfStrings vs. XYZControllerForEfficientStorageOfStrings
+    - Spelling similar concepts similarly is information. Using inconsistent spellings is disinformation.
+    - A truly awful example of disinformative names would be the use of lower-case L or uppercase O as variable names, especially in combination. The problem, of course, is that they look almost entirely like the constants one and zero, respectively.
+
+* Make Meaningful Distinctions
+    - Programmers create problems for themselves when they write code solely to satisfy a compiler because you can’t use the same name to refer to two different things in the same scope, you might be tempted to change one name in an arbitrary way (mispelling one).
+    - Is not sufficient to add number series or noise words, even though the compiler is satisfied. If names must be different, then they should also mean something different.
+    - Number-series naming (a1, a2, .. aN) is the opposite of intentional naming. Such names are not disinformative—they are noninformative; they provide no clue to the author’s intention.
+    - Noise words are another meaningless distinction. Imagine that you have a 'Product' class. If you have another called 'ProductInfo' or 'ProductData', you have made the names different without making them mean anything different. 'Info' and 'Data' are indistinct noise words like 'a', 'an', and 'the'.
+    - Note that there is nothing wrong with using prefix conventions like 'a' and 'the' so long as they make a meaningful distinction. For example you might use 'a' for all local variables and 'the' for all function arguments. The problem comes in when you decide to call a variable 'theZork' because you already have another variable named 'zork'.
+    - Noise words are redundant. Breaks an earlier rule about disinformation.
+    - Distinguish names in such a way that the reader knows what the differences offer.
+
+* Use Pronounceable Names: make your names pronounceable.
+* Use Searchable Names
+    - Single-letter names and numeric constants have a particular problem in that they are not easy to locate across a body of text.
+    - Searches may turn up the digit as part of file names, other constant definitions, and in various expressions where the value is used with different intent. It is even worse when a constant is a long number and someone might have transposed digits, thereby creating a bug while simultaneously evading the programmer’s search.
+    - The name 'e' is a poor choice for any variable for which a programmer might need to search. It is the most common letter in the English language and likely to show up in every passage of text in every program.
+    - My personal preference is that single-letter names can ONLY be used as local variables inside short methods. The length of a name should correspond to the size of its scope
+    - If a variable or constant might be seen or used in multiple places in a body of code, it is imperative to give it a search-friendly name.
+    E.g.
+        for (int j=0; j<34; j++) {
+            s += (t[j]*4)/5;
+        }
+
+        vs.
+
+        int realDaysPerIdealDay = 4;
+        const int WORK_DAYS_PER_WEEK = 5;
+        int sum = 0;
+        for (int j=0; j < NUMBER_OF_TASKS; j++) {
+            int realTaskDays = taskEstimate[j] * realDaysPerIdealDay;
+            int realTaskWeeks = (realdays / WORK_DAYS_PER_WEEK);
+            sum += realTaskWeeks;
+        }
+
+* Avoid Encodings
+    - Encoding type or scope information into names simply adds an extra burden of deciphering.
+    - Encoded names are seldom pronounceable and are easy to mis-type.
+
+* Hungarian Notation
+    - HN and other forms of type encoding are simply impediments. They make it harder to change the name or type of a variable, function, or class. They make it harder to read the code. And they create the possibility that the encoding system will mislead the reader.
+    E.g. phoneNumber phoneString; // name not changed when type changed!
+
+* Member Prefixes
+    - You also don’t need to prefix member variables with m_ anymore. Your classes and functions should be small enough that you don’t need them.
+    public class Part { 
+        private String m_dsc; // The textual description
+        void setName(String name) {
+            m_dsc = name;
+        }
+    }
+_________________________________________________
+    public class Part { 
+        String description;
+        void setDescription(String description) { 
+            this.description = description;
+        }
+    }
+
+* Interfaces and Implementations
+    - I prefer to leave interfaces unadorned. The preceding 'I' is a distraction at best and too much information at worst.
+    - Calling it 'ShapeFactoryImp', or even the hideous 'CShapeFactory', is preferable to encoding the interface.
+
+* Avoid Mental Mapping
+    - Readers shouldn’t have to mentally translate your names into other names they already know.
+    - This is a problem with single-letter variable names 'i' or 'j' or 'k' a single-letter name is a poor choice; it’s just a place holder that the reader must mentally map to the actual concept.
+
+* Class Names
+    - Classes and objects should have noun or noun phrase names like Customer, WikiPage, Account, and AddressParser. Avoid words like Manager, Processor, Data, or Info in the name of a class. A class name should not be a verb.
+
+* Method Names
+    - Methods should have verb or verb phrase names like postPayment, deletePage, or save. Accessors, mutators, and predicates should be named for their value and prefixed with get, set, and is according to the javabean standard.
+    E.g.
+    string name = employee.getName();
+    customer.setName("mike");
+    if (paycheck.isPosted())...
+    - When constructors are overloaded, use static factory methods with names that describe the arguments.
+    E.g.
+    Complex fulcrumPoint = Complex.FromRealNumber(23.0); is generally better than Complex fulcrumPoint = new Complex(23.0); Consider enforcing their use by making the corresponding constructors private.
+
+* Don't Be Cute
+    - Choose clarity over entertaiment value.
+    E.g. don’t use the name whack() to mean kill(). Don’t tell little culture-dependent jokes like eatMyShorts() to mean abort().
+
+* Pick One Word per Concept
+    - Pick one word for one abstract concept and stick with it. For instance, it’s confusing to have 'fetch', 'retrieve', and 'get' as equivalent methods of different classes.
+    - The function names have to stand alone, and they have to be consistent in order for you to pick the correct method.
+    - Likewise, it’s confusing to have a 'controller' and a 'manager' and a 'driver' in the same code base.
+    - The name leads you to expect two objects that have very different type as well as having different classes.
+
+* Don’t Pun
+    - Avoid using the same word for two purposes. Using the same term for two different ideas is essentially a pun.
+    - You follow the “one word per concept” rule, you could end up with many classes that have, for example, an 'add' method. As long as the parameter lists and return values of the various 'add' methods are semantically equivalent, all is well.
+    - However one might decide to use the word 'add' for “consistency” when he or she is not in fact adding in the same sense.
+
+* Use Solution Domain Names
+    - Use computer science (CS) terms, algorithm names, pattern names, math terms, and so forth.
+    - The name 'AccountVisitor' means a great deal to a programmer who is familiar with the VISITOR pattern.
+
+* Use Problem Domain Names
+    - When there is no “programmer-eese” for what you’re doing, use the name from the problem domain.
+    - Separating solution and problem domain concepts is part of the job of a good programmer and designer.
+
+* Add Meaningful Context
+    - You need to place names in context for your reader by enclosing them in well-named classes, functions, or namespaces. When all else fails, then prefixing the name may be necessary as a last resort.
+    - You can add context by using prefixes: 'addrFirstName', 'addrLastName', 'addrState', and so on. At least readers will understand that these variables are part of a larger structure. Of course, a better solution is to create a class named 'Address'.
+
+* Don’t Add Gratuitous Context
+    - In an imaginary application called “Gas Station Deluxe,” it is a bad idea to prefix every class with 'GSD'. You type G and press the completion key and are rewarded with a mile-long list of every class in the system. Is that wise?
+    - Shorter names are generally better than longer ones, so long as they are clear. Add no more context to a name than is necessary.
+    - If I need to differentiate between MAC addresses, port addresses, and Web addresses, I might consider 'PostalAddress', 'MAC', and 'URI'.
+
++ Chapter 3: Functions
+
+* Small!
+    - The first rule of functions is that they should be small. The second rule of functions is that they should be smaller than that (functions should be very small).
+    - Lines should not be 150 characters long. Functions should not be 100 lines long. Functions should hardly ever be 20 lines long.
+    Each was transparently obvious. Each told a story. And each led you to the next in a compelling order. That’s how short your functions should be!
+
+* Blocks and Indenting
+    - This implies that the blocks within 'if' statements, 'else' statements, 'while' statements, and so on should be one line long. Probably that line should be a function call. Also adds documentary value because the function called within the block can have a nicely descriptive name.
+    - This also implies that functions should not be large enough to hold nested structures. Therefore, the indent level of a function should not be greater than one or two.
+
+* Do One Thing
+    - FUNCTIONS SHOULD DO ONE THING. THEY SHOULD DO IT WELL. THEY SHOULD DO IT ONLY.
+    - If a function does only those steps that are one level below the stated name of the function, then the function is doing one thing. The reason we write functions is to decompose a larger concept (in other words, the name of the function) into a set of steps at the next level of abstraction.
+    - Another way to know that a function is doing more than “one thing” is if you can extract another function from it with a name that is not merely a restatement of its implementation
+
+* Sections within Functions
+    - Functions that do one thing cannot be reasonably divided into sections.
+
+* One Level of Abstraction per Function
+    - In order to make sure our functions are doing “one thing,” we need to make sure that the statements within our function are all at the same level of abstraction.
+    - Mixing levels of abstraction within a function is always confusing, once details are mixed with essential concepts, more and more details tend to accrete within the function.
+
+* Reading Code from Top to Bottom: The Stepdown Rule
+    - We want every function to be followed by those at the next level of abstraction so that we can read the program, descending one level of abstraction at a time as we read down the list of functions.
+    - It is the key to keeping functions short and making sure they do “one thing.” Making the code read like a top-down set of TO paragraphs is an effective technique for keeping the abstraction level consistent.
+
+* Switch Statements
+    - It’s hard to make a small switch statement. n a switch statement with only two cases is larger than I’d like a single block or function to be.
+    - It’s also hard to make a switch statement that does one thing. By their nature, switch statements always do N things.
+    - Unfortunately we can’t always avoid switch statements, but we can make sure that each switch statement is buried in a low-level class and is never repeated.
+    - We do this with polymorphism. E.g.
+
+    public Money calculatePay(Employee e) 
+    throws InvalidEmployeeType {
+        switch (e.type) {
+            case COMMISSIONED:
+                return calculateCommissionedPay(e);
+            case HOURLY:
+                return calculateHourlyPay(e);
+            case SALARIED:
+                return calculateSalariedPay(e);
+            default:
+                throw new InvalidEmployeeType(e.type);
+        }
+    }
+
+    - There are several problems with this function.
+        * First, it’s large, and when new employee types are added, it will grow.
+        * Second, it very clearly does more than one thing.
+        * Third, it violates the Single Responsibility Principle (SRP) because there is more than one reason for it to change.
+        * Fourth, it violates the Open Closed Principle8 (OCP) because it must change whenever new types are added.
+    - The solution to this problem is to bury the switch statement in the basement of an ABSTRACT FACTORY, and never let anyone see it.
+    - The factory will use the switch statement to create appropriate instances of the derivatives of Employee, and the various functions, such as calculatePay, isPayday, and deliverPay, will be dispatched polymorphically through the Employee interface.
+    - My general rule for switch statements is that they can be tolerated if they appear only once, are used to create polymorphic objects, and are hidden behind an inheritance relationship so that the rest of the system can’t see them. There are times when I violate one or more parts of that rule.
+
+    public abstract class Employee {
+        public abstract boolean isPayday();
+        public abstract Money calculatePay();
+        public abstract void deliverPay(Money pay);
+    }
+    -----------------
+    public interface EmployeeFactory {
+        public Employee makeEmployee(EmployeeRecord r) throws InvalidEmployeeType;
+    }
+    -----------------
+    public class EmployeeFactoryImpl implements EmployeeFactory {
+        public Employee makeEmployee(EmployeeRecord r) throws InvalidEmployeeType {
+        switch (r.type) {
+            case COMMISSIONED:
+                return new CommissionedEmployee(r) ;
+            case HOURLY:
+                return new HourlyEmployee(r);
+            case SALARIED:
+                return new SalariedEmploye(r);
+            default:
+                throw new InvalidEmployeeType(r.type);
+            }
+        }
+    }
+
+* Use Descriptive Names
+    - Remember Ward’s principle: “You know you are working on clean code when each routine turns out to be pretty much what you expected.”
+    - Half the battle to achieving that principle is choosing good names for small functions that do one thing. The smaller and more focused a function is, the easier it is to choose a descriptive name.
+    - Don’t be afraid to make a name long. A long descriptive name is better than a short enigmatic name. A long descriptive name is better than a long descriptive comment.
+    - Use a naming convention that allows multiple words to be easily read in the function names, and then make use of those multiple words to give the function a name that says what it does.
+    - Don’t be afraid to spend time choosing a name. Indeed, you should try several different names and read the code with each in place.
+    - Choosing descriptive names will clarify the design of the module in your mind and help you to improve it.
+    - Be consistent in your names. Use the same phrases, nouns, and verbs in the function names you choose for your modules.
+        - E.g. 'includeSetupAndTeardownPages', 'includeSetupPages', 'includeSuiteSetupPage', and 'includeSetupPage'.
+
+* Function Arguments
+    - The ideal number of arguments for a function is zero (niladic), one (monadic), two (dyadic), three (triadic) should be avoided where possible. More than three (polyadic) requires justification and shouldn’t be used anyway.
+    - Arguments are even harder from a testing point of view. Imagine the difficulty of writing all the test cases to ensure that all the combinations of arguments work properly.
+    - If there are no arguments, this is trivial. If there’s one argument, it’s not too hard. With two arguments the problem gets a bit more challenging. With more than two arguments, testing every combination of appropriate values can be daunting.
+    - We don’t usually expect information to be going out through the arguments. So output arguments often cause us to do a double-take.
+
+* Common Monadic Forms.
+    - There are two very common reasons to pass a single argument into a function. You may be asking a question about that argument, as in boolean fileExists(“MyFile”). Or you may be operating on that argument, transforming it into something else and returning it.
+    - You should choose names that make the distinction clear, and always use the two forms in a consistent context.
+    - A somewhat less common, is an 'event'.
+    - In this form there is an input argument but no output argument. The overall program is meant to interpret the function call as an event and use the argument to alter the state of the system, for example, void passwordAttemptFailedNtimes(int attempts).
+    - It should be very clear to the reader that this is an event. Choose names and contexts carefully.
+    - Try to avoid any monadic functions that don’t follow these forms.
+    - Using an output argument instead of a return value for a transformation is confusing. If a function is going to transform its input argument, the transformation should appear as the return value.
+
+* Flag Arguments
+    - Flag arguments are ugly. Passing a boolean into a function is a truly terrible practice.
+    - Proclaiming that this function does more than one thing. It does one thing if the flag is true and another if the flag is false!
+
+* Dyadic Functions
+    - A function with two arguments is harder to understand than a monadic function.
+    - There are times, where two arguments are appropriate. For example, Point p = new Point(0,0); is perfectly reasonable. The two arguments in this case are ordered components of a single value!
+    - Dyadic functions like assertEquals(expected, actual) are problematic. How many times have you put the actual where the expected should be?
+    - Dyads aren’t evil, and you will certainly have to write them. However, you should be aware that they come at a cost and should take advantage of what mechanims may be available to you to convert them into monads.
+
+* Triads
+    - Functions that take three arguments are significantly harder to understand than dyads.
+    - I suggest you think very carefully before creating a triad.
+
+* Argument Objects
+    - When a function seems to need more than two or three arguments, it is likely that some of those arguments ought to be wrapped into a class of their own.
+    - Consider, the difference between the two following declarations:
+        Circle makeCircle(double x, double y, double radius);
+        Circle makeCircle(Point center, double radius);
+    - Reducing the number of arguments by creating objects out of them may seem like cheating, but it’s not.
+    - When groups of variables are passed together, the way x and y are in the example above, they are likely part of a concept that deserves a name of its own.
+
+* Verbs and Keywords
+    - Choosing good names for a function can go a long way toward explaining the intent of the function and the order and intent of the arguments. In the case of a monad, the function and argument should form a very nice verb/noun pair.
+    - E.g. writeField(name), tell us that the "name" thing is a "field".
+    - Using this form we encode the names of the arguments into the function name.
+    - This strongly mitigates the problem of having to remember the ordering of the arguments.
+
+* Have No Side Effects
+    - Your function promises to do one thing, but it also does other hidden things. Sometimes it will make unexpected changes to the variables of its own class. Sometimes it will make them to the parameters passed into the function or to system globals.
+    - In either case they are devious and damaging mistruths that often result in strange temporal couplings and order dependencies.
+    - Consider for example the function in Listing 3-6.
+    - If you must have a temporal coupling, you should make it clear in the name of the function
+
+* Output Arguments
+    - I’m sure you’ve done a double-take on an argument that was actually an output rather than an input E.g. appendFooter(s).
+    - It doesn’t take long to look at the function signature and see: public void appendFooter(StringBuffer report)
+    - Arguments. However, much of the need for output arguments disappears in OO languages because this is intended to act as an output argument. In other words, it would be better for appendFooter to be invoked as report.appendFooter();
+    - Output arguments should be avoided. If your function must change the state of something, have it change the state of its owning object.
+
+* Command Query Separation
+    - Functions should either do something or answer something, but not both. Doing both often leads to confusion.
+
+* Prefer Exceptions to Returning Error Codes
+    - Returning error codes from command functions is a subtle violation of command query separation. It promotes commands being used as expressions in the predicates of if statement.
+    - This does not suffer from verb/adjective confusion but does lead to deeply nested structures. When you return an error code, you create the problem that the caller must deal with the error immediately.
+    - On the other hand, if you use exceptions instead of returned error codes, then the error processing code can be separated from the happy path code and can be simplified.
+
+* Extract Try/Catch Blocks
+    - Try/catch blocks confuse the structure of the code and mix error processing with normal processing. So it is better to extract the bodies of the try and catch blocks out into functions of their own.
+    - This provides a nice separation that makes the code easier to understand and modify.
+
+* Error Handling Is One Thing
+    - Functions should do one thing. Error handing is one thing. Thus, a function that handles errors should do nothing else.
+    - This implies that if the keyword try exists in a function, it should be the very first word in the function and that there should be nothing after the catch/finally blocks.
+
+* The Error.java Dependency Magnet
+    - Returning error codes usually implies that there is some class or enum in which all the error codes are defined. Many other classes must import and use them.
+    - When the enum changes, all those other classes need to be recompiled and redeployed.
+    - When you use exceptions rather than error codes, then new exceptions are derivatives of the exception class. They can be added without forcing any recompilation or redeployment.
+
+* Don’t Repeat Yourself
+    - Duplication may be the root of all evil in software. Many principles and practices have been created for the purpose of controlling or eliminating it.
+    - Consider that all of Codd’s database normal forms serve to eliminate duplication in data.
+    - Consider also how object-oriented programming serves to concentrate code into base classes that would otherwise be redundant.
+    - Structured programming, Aspect Oriented Programming, Component Oriented Programming, are all, in part, strategies for eliminating duplication.
+
+* Structured Programming (Edsger Dijkstra’s rules of structured programming)
+    - Every function, and every block within a function, should have one entry and one exit. Following these rules means that there should only be one return statement in a function, no break or continue statements in a loop, and never, ever, any goto statements.
+    - Those rules serve little benefit when functions are very small. It is only in larger functions that such rules provide significant benefit.
+    - If you keep your functions small, then the occasional multiple ''return', 'break', or 'continue' statement does no harm and can sometimes even be more expressive than the single-entry, single-exit rule. On the other hand, 'goto' only makes sense in large functions, so it should be avoided.
+
++ Chapter 4
