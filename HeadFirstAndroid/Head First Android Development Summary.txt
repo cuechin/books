@@ -340,6 +340,21 @@ Head First Android Development Summary
 	- Navigation graph:
 		* Holds navigation information such as destinations.
 		* Describes the possible navigation paths through an app.
-		* Destination: A place you can navigate to, usually a fragment.
-		* Navigation host: An empty container used to display destinations.
-		* Navigation controller: Controls which destinations is displayed.
+	- Destination: A place you can navigate to, usually a fragment.
+	- Navigation host: An empty container used to display destinations.
+	- Navigation controller: Controls which destinations is displayed.
+* You tell Android which items should appear on the toolbar by defining a menu. Each menu is defined in an XML menu resource file which specifies the items that you want to appear.
+Q: Is it just toolbars that use menu resource files? A: menu resource files are also used for bottom navigation bars and navigation drawers. You can create pop-up and context menus with them too.
+* Inside the <menu> element, you typically have a number of <item> elements, each one describing a separate item.
+* The <item> element has a number of attributes that you can use to control the item’s appearance.
+* The android:id attribute assigns an ID to the item. This ID is used by the Navigation component to navigate to a destination, and it must have the same ID as the destination you want to navigate to in the navigation graph.
+* The android:icon attribute specifies which icon (if any) should be displayed for the item.
+* The android:title attribute defines the item’s text.
+* The app:showAsAction attribute specifies how you want the item to appear in the toolbar.
+* The menu item’s ID must match the destination ID in the navigation graph.
+* Once you’ve defined the menu resource file, you add its items to the toolbar by implementing the onCreateOptionsMenu() method. This method gets called when the activity is ready to add items to the toolbar. It inflates the menu resource file, and adds each item it describes to the toolbar.
+* The line: menuInflater.inflate(R.menu.menu_toolbar, menu)
+	- Inflates the menu resource file. Behind the scenes, it creates a Menu object that represents the menu resource file, and any items the menu resource file contains are translated to MenuItem objects. These are then added to the toolbar.
+	- you make them respond to clicks by implementing onOptionsItemSelected().
+* Each time the menu item is clicked, the navigation controller gets its ID and looks for a matching one in the navigation graph. It then passes the destination with this ID to the navigation host so that it’s displayed on the device screen.
+* 
